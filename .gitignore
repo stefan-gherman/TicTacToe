@@ -3,6 +3,9 @@
 ### PyCharm ###
 .idea/
 
+### Python cache ###
+__pycache__/
+
 # Environments
 .env
 .venv
