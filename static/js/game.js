@@ -42,8 +42,8 @@ const verifyWinner = (arr, xVal, yVal, points) => {
     let valO = 0;
     let valX = 0;
 
-    for (let i =0; i< rowNumber; i++){
-        for (let j=0; j<colNumber; j++){
+    for (let i =0; i< xVal; i++){
+        for (let j=0; j<yVal; j++){
             if (arr[i][j] === 'X'){
                 valX += 1;
             } else if (arr[i][j] === 'O'){
@@ -62,8 +62,8 @@ const verifyWinner = (arr, xVal, yVal, points) => {
     valX=0;
     valO=0;
 
-    for (let i =0; i< colNumber; i++){
-        for (let j=0; j<rowNumber; j++){
+    for (let i =0; i< yVal; i++){
+        for (let j=0; j< xVal; j++){
             if (arr[j][i] === 'X'){
                 valX += 1;
             } else if (arr[j][i] === 'O'){
@@ -78,8 +78,59 @@ const verifyWinner = (arr, xVal, yVal, points) => {
         valX = 0;
         valO = 0;
     }
+    valX = 0;
+    valO = 0;
 
-    
+
+    if (xVal === yVal) {
+        for(let i = 0; i< xVal; i++){
+            for (let j = 0; j< xVal; j++){
+                if (i === j){
+                    if (arr[i][j] === 'X'){
+                        valX += 1;
+                    } else if (arr[i][j] === 'O'){
+                        valO += 1;
+                    }
+
+                }
+            }
+            console.log("----------- First");
+             console.log(valX + " value of x's", valO + " value of o's");
+             console.log("-----------");
+            if (valX === points){
+                return 'X';
+            } else if(valO === points){
+                return 'O';
+            }
+
+        }
+        valX = 0;
+        valO = 0;
+
+        for(let i = 0; i< xVal; i++){
+            for (let j =0; j< xVal; j++){
+                if (j === xVal - i - 1 ){
+                    if (arr[i][j] === 'X'){
+                        valX += 1;
+                    } else if (arr[i][j] === 'O'){
+                        valO += 1;
+                    }
+                }
+
+            }
+            console.log("----------- Sec");
+            console.log(valX + " value of x's", valO + " value of o's");
+            console.log("-----------");
+            if (valX === points){
+                return 'X';
+            } else if(valO === points){
+                return 'O';
+            }
+        }
+
+    }
+
+
     return false;
 }
 
@@ -107,7 +158,7 @@ for (let gameBoard of gameBoardSquare) {
             if ( winner != false){
                 pressed.innerHTML = xSymbol.innerHTML;
                 disableHandler();
-                setTimeout(function () {alert(winner + " Won!");}, 500);
+                setTimeout(function () {alert(winner + " Won!");}, 250);
 
             }
         } else if(sessionStorage.currentTurn === 'O') {
@@ -119,7 +170,7 @@ for (let gameBoard of gameBoardSquare) {
             if ( winner != false){
                 pressed.innerHTML = oSymbol.innerHTML;
                 disableHandler();
-                setTimeout(function () {alert(winner + " Won!");}, 500);
+                setTimeout(function () {alert(winner + " Won!");}, 250);
 
             }
         }
