@@ -20,18 +20,108 @@ oSymbol.setAttribute("style", "font-size:24px;")
 oSymbol.textContent = "O"
 
 
+const gameBoard = document.getElementById("game-board");
+const rowNumber = parseInt(gameBoard.dataset.rowNum);
+const colNumber = parseInt(gameBoard.dataset.colNum);
+const victoryCond = parseInt(gameBoard.dataset.winSize);
+
+
+
+
+let boardRepresentation = []
+
+
+for (let i = 0; i< rowNumber; i++){
+    boardRepresentation.push([])
+    for( let j = 0; j< colNumber; j++){
+        boardRepresentation[i].push('*');
+    }
+}
+
+const verifyWinner = (arr, xVal, yVal, points) => {
+    let valO = 0;
+    let valX = 0;
+
+    for (let i =0; i< rowNumber; i++){
+        for (let j=0; j<colNumber; j++){
+            if (arr[i][j] === 'X'){
+                valX += 1;
+            } else if (arr[i][j] === 'O'){
+                valO += 1;
+            }
+
+        }
+         if (valX === points){
+                return 'X';
+            } else if(valO === points){
+                return 'O';
+            }
+        valX = 0;
+        valO = 0;
+    }
+    valX=0;
+    valO=0;
+
+    for (let i =0; i< colNumber; i++){
+        for (let j=0; j<rowNumber; j++){
+            if (arr[j][i] === 'X'){
+                valX += 1;
+            } else if (arr[j][i] === 'O'){
+                valO += 1;
+            }
+        }
+         if (valX === points){
+                return 'X';
+            } else if(valO === points){
+                return 'O';
+            }
+        valX = 0;
+        valO = 0;
+    }
+
+    
+    return false;
+}
+
+const disableBoxes = (arr) => {
+    for (let innerArr of arr){
+        innerArr.setAttribute("style", "pointer-events: none;");
+    }
+}
+
+const disableHandler = () => {
+    disableBoxes(gameBoardSquare);
+}
+
+
 for (let gameBoard of gameBoardSquare) {
     gameBoard.addEventListener('click', function (event) {
         let pressed = event.target;
         console.log(pressed.getAttribute("class"), pressed);
         if (sessionStorage.currentTurn === 'X'){
-            pressed.textContent = xSymbol.innerHTML;
+            pressed.innerHTML = xSymbol.innerHTML;
             sessionStorage.currentTurn ='O';
-            pressed.setAttribute("style", "pointer-events: none;")
+            pressed.setAttribute("style", "pointer-events: none;");
+            boardRepresentation[parseInt(pressed.dataset.coordinateY)][parseInt(pressed.dataset.coordinateX)] = xSymbol.innerHTML;
+            let winner =  verifyWinner(boardRepresentation,rowNumber,colNumber,victoryCond);
+            if ( winner != false){
+                pressed.innerHTML = xSymbol.innerHTML;
+                disableHandler();
+                setTimeout(function () {alert(winner + " Won!");}, 500);
+
+            }
         } else if(sessionStorage.currentTurn === 'O') {
-            pressed.textContent = oSymbol.innerHTML;
+            pressed.innerHTML = oSymbol.innerHTML;
             sessionStorage.currentTurn='X';
-            pressed.setAttribute("style", "pointer-events: none;")
+            pressed.setAttribute("style", "pointer-events: none;");
+            boardRepresentation[parseInt(pressed.dataset.coordinateY)][parseInt(pressed.dataset.coordinateX)] = oSymbol.innerHTML;
+            let winner =  verifyWinner(boardRepresentation,rowNumber,colNumber,victoryCond);
+            if ( winner != false){
+                pressed.innerHTML = oSymbol.innerHTML;
+                disableHandler();
+                setTimeout(function () {alert(winner + " Won!");}, 500);
+
+            }
         }
 
 
