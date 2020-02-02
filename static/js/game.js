@@ -27,10 +27,14 @@ for (let gameBoard of gameBoardSquare) {
         if (sessionStorage.currentTurn === 'X'){
             pressed.textContent = xSymbol.innerHTML;
             sessionStorage.currentTurn ='O';
+            pressed.setAttribute("style", "pointer-events: none;")
         } else if(sessionStorage.currentTurn === 'O') {
             pressed.textContent = oSymbol.innerHTML;
             sessionStorage.currentTurn='X';
+            pressed.setAttribute("style", "pointer-events: none;")
         }
+
+
 
     });
 }
