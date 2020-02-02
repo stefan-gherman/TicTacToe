@@ -2,6 +2,7 @@
 
 sessionStorage.setItem("currentTurn", "X")
 
+
 retryButton = document.getElementById("retry-button");
 
 retryButton.addEventListener("click", function(event){
@@ -25,6 +26,7 @@ const rowNumber = parseInt(gameBoard.dataset.rowNum);
 const colNumber = parseInt(gameBoard.dataset.colNum);
 const victoryCond = parseInt(gameBoard.dataset.winSize);
 
+sessionStorage.squaresLeft = rowNumber * colNumber;
 
 
 
@@ -94,9 +96,7 @@ const verifyWinner = (arr, xVal, yVal, points) => {
 
                 }
             }
-            console.log("----------- First");
-             console.log(valX + " value of x's", valO + " value of o's");
-             console.log("-----------");
+
             if (valX === points){
                 return 'X';
             } else if(valO === points){
@@ -118,9 +118,6 @@ const verifyWinner = (arr, xVal, yVal, points) => {
                 }
 
             }
-            console.log("----------- Sec");
-            console.log(valX + " value of x's", valO + " value of o's");
-            console.log("-----------");
             if (valX === points){
                 return 'X';
             } else if(valO === points){
@@ -144,12 +141,16 @@ const disableHandler = () => {
     disableBoxes(gameBoardSquare);
 }
 
-
+console.log(sessionStorage.squaresLeft);
 for (let gameBoard of gameBoardSquare) {
+
+
     gameBoard.addEventListener('click', function (event) {
         let pressed = event.target;
         console.log(pressed.getAttribute("class"), pressed);
+
         if (sessionStorage.currentTurn === 'X'){
+            sessionStorage.squaresLeft -= 1;
             pressed.innerHTML = xSymbol.innerHTML;
             sessionStorage.currentTurn ='O';
             pressed.setAttribute("style", "pointer-events: none;");
@@ -163,6 +164,7 @@ for (let gameBoard of gameBoardSquare) {
             }
         } else if(sessionStorage.currentTurn === 'O') {
             pressed.innerHTML = oSymbol.innerHTML;
+            sessionStorage.squaresLeft -= 1;
             sessionStorage.currentTurn='X';
             pressed.setAttribute("style", "pointer-events: none;");
             boardRepresentation[parseInt(pressed.dataset.coordinateY)][parseInt(pressed.dataset.coordinateX)] = oSymbol.innerHTML;
@@ -174,7 +176,11 @@ for (let gameBoard of gameBoardSquare) {
 
             }
         }
-
+        
+        if (parseInt(sessionStorage.squaresLeft) < 1) {
+            disableHandler();
+            setTimeout(function () {alert("It's a tie!");}, 250);
+        }
 
 
     });
